@@ -1,4 +1,3 @@
-export type StatName = "hp" | "attack";
 
 export interface CompanyResponse {
   id: number;
@@ -21,3 +20,4 @@ export interface Company {
   averageIncome: number;
   lastMonthIncome: number;
 }
+

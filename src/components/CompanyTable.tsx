@@ -9,16 +9,17 @@ export function CompanyTable(props: { companies: Company[] | undefined}): JSX.El
 
     <div className="table__container">
       <table className="table">
-        <thead className="table__head">
+<thead>
           <tr className="table__head__row">
-            <th className="table__head__item">ID</th>
-            <th className="table__head__item">Name</th>
-            <th className="table__head__item">City</th>
-            <th className="table__head__ item"> Total income</th>
-            <th className="table__head__item"> Average income</th>
-            <th className="table__head__item"> Last month income </th>
+            <th data-column="id" data-order="desc" className="table__head__item">ID</th>
+            <th data-column="name" data-order="desc" className="table__head__item">Name</th>
+            <th data-column="city" data-order="desc" className="table__head__item">City</th>
+            <th data-column="total" data-order="desc" className="table__head__ item"> Total income</th>
+            <th data-column="average" data-order="desc" className="table__head__item"> Average income</th>
+            <th data-column="lastMonth" data-order="desc" className="table__head__item"> Last month income </th>
           </tr>
-        </thead>
+
+</thead>
         <tbody>
           {props.companies?.map((item, index) => {
             return [
