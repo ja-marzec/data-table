@@ -1,38 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { CompanyResponse, CompanyIncomeResponse, Company } from "../Model";
+import React from "react";
+import { Company } from "../Model";
 import { CompanyInfo } from "./CompanyInfo";
-import { getFromUrl, fetchIncomes } from "../services/ApiClient";
 
 export function CompanyTable(props: { companies: Company[] | undefined}): JSX.Element {
-  const [companyIncome, setCompanyIncome] = useState<CompanyIncomeResponse>();
-  const [companyFull, setCompanyFull] = useState<any>([]);
 
-  useEffect(() => {
-    getIncomes();
-  }, [props.companies]);
-
-  function getIncomes() {
-    if (props.companies === []) {
-      return;
-    }
-    props.companies?.map(function (item) {
-      fetchIncomes(item.id).then(setCompanyIncome);
-      //).then(response => setCompanyIncome(response));
-    });
-  }
-
-  
   return (
+
+
     <div className="table__container">
       <table className="table">
         <thead className="table__head">
           <tr className="table__head__row">
-            <th className="table__item">ID</th>
-            <th className="table__item">Name</th>
-            <th className="table__item">City</th>
-            <th className="table__item"> Total income</th>
-            <th className="table__item"> Average income</th>
-            <th className="table__item"> Last month income </th>
+            <th className="table__head__item">ID</th>
+            <th className="table__head__item">Name</th>
+            <th className="table__head__item">City</th>
+            <th className="table__head__ item"> Total income</th>
+            <th className="table__head__item"> Average income</th>
+            <th className="table__head__item"> Last month income </th>
           </tr>
         </thead>
         <tbody>
@@ -48,7 +32,6 @@ export function CompanyTable(props: { companies: Company[] | undefined}): JSX.El
               </tr>,
             ];
           })}
-          <CompanyInfo />
         </tbody>
       </table>
     </div>

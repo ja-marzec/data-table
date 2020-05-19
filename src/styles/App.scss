@@ -5,3 +5,42 @@ body {
     font-weight: 100;
    
 }
+.table{
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    line-height: 3em;
+    // media line height, width,
+    &__head{
+
+        &__item{
+
+            &__button{
+                border: none;
+                border-radius: 5%;
+                vertical-align: center;
+                text-align: left;
+                text-transform: uppercase;
+
+                margin-bottom: 1em;
+            }
+        }
+    }
+&__row{
+    &:nth-child(odd) {
+        background-color: #d0eaff;
+    }
+}
+    &__column{
+        &:first-child{
+            width: 3vw;
+        }
+
+        width: 20vw;
+        text-align: left;
+        font-size: 0.8em;
+        font-weight: 100;
+    }
+
+}
