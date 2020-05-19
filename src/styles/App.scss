@@ -1,17 +1,35 @@
 @import "reset-default";
-
+@import "varibles";
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "jost-medium";
     font-weight: 100;
-   
+
 }
+
+label{
+    display: block;
+    text-align: center;
+    margin: 30px ;
+}
+input{
+    border: solid 1px #d0eaff;
+    padding: 5px 10px;
+    margin-left: 1em;
+    border-radius: 5px;
+
+}
+
 .table{
     display: block;
     width: 80%;
     margin: 0 auto;
     border-collapse: collapse;
-    line-height: 3em;
-    // media line height, width,
+    overflow-x: auto;
+
+    @media (max-width: $md) {
+        width: 100%;
+    }
+
     &__head{
 
         &__item{
@@ -22,25 +40,60 @@ body {
                 vertical-align: center;
                 text-align: left;
                 text-transform: uppercase;
-
                 margin-bottom: 1em;
+                cursor: pointer;
+                padding-left: 10px;
+                width: 13.3vw;
+                img{
+                    transform: rotate(270deg);
+                    height: 0.8em;
+                }
+                &--big{
+                    img{
+                        transform: rotate(90deg);
+                    }
+                }
+
+                @media (max-width: $md) {
+                    width: 30vw;
+                    font-size: 0.8em;
+                    margin-bottom: 0;
+                }
+
             }
         }
     }
 &__row{
+    height: 2em;
     &:nth-child(odd) {
         background-color: #d0eaff;
     }
 }
     &__column{
-        &:first-child{
-            width: 3vw;
-        }
-
-        width: 20vw;
+        vertical-align: middle;
         text-align: left;
+        padding-left: 10px;
         font-size: 0.8em;
         font-weight: 100;
+        width: 30vw;
+
+    }
+    &:first-child{
+        width: 5vw;
     }
 
+}
+.pagination{
+    margin: 30px 0;
+    text-align: center;
+    &__button{
+        border-radius: 50px;
+        background-color: white;
+        border: none;
+        width: 8em;
+        letter-spacing: 2.5px;
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease 0s;
+        cursor: pointer;
+        }
 }
