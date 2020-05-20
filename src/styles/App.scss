@@ -1,22 +1,22 @@
 @import "reset-default";
 @import "varibles";
-body {
-    font-family: "jost-medium";
-    font-weight: 100;
 
+
+.app {
+    font-family: "Jost-medium";
+    font-weight: 100;
 }
 
-label{
+.label{
     display: block;
     text-align: center;
     margin: 30px ;
 }
-input{
-    border: solid 1px #d0eaff;
+.input{
+    border: solid 1px $light-blue;
     padding: 5px 10px;
     margin-left: 1em;
     border-radius: 5px;
-
 }
 
 .table{
@@ -25,15 +25,11 @@ input{
     margin: 0 auto;
     border-collapse: collapse;
     overflow-x: auto;
-
     @media (max-width: $md) {
         width: 100%;
     }
-
     &__head{
-
         &__item{
-
             &__button{
                 border: none;
                 border-radius: 5%;
@@ -44,21 +40,22 @@ input{
                 cursor: pointer;
                 padding-left: 10px;
                 width: 13.3vw;
-                img{
-                    transform: rotate(270deg);
-                    height: 0.8em;
-                }
-                &--big{
-                    img{
-                        transform: rotate(90deg);
-                    }
-                }
-
                 @media (max-width: $md) {
                     width: 30vw;
                     font-size: 0.8em;
                     margin-bottom: 0;
                 }
+                img{
+                    transform: rotate(270deg);
+                    height: 0.8em;
+                }
+                &--descending {
+                    img{
+                        transform: rotate(90deg);
+                    }
+                }
+
+
 
             }
         }
@@ -66,7 +63,7 @@ input{
 &__row{
     height: 2em;
     &:nth-child(odd) {
-        background-color: #d0eaff;
+        background-color: $light-blue;
     }
 }
     &__column{
@@ -86,6 +83,7 @@ input{
 .pagination{
     margin: 30px 0;
     text-align: center;
+
     &__button{
         border-radius: 50px;
         background-color: white;

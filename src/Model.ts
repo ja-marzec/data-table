@@ -1,4 +1,3 @@
-
 export interface CompanyResponse {
   id: number;
   name: string;
@@ -20,4 +19,11 @@ export interface Company {
   averageIncome: number;
   lastMonthIncome: number;
 }
-
+export const COMPANY_KEYS: Array<keyof Company> = [
+  "id",
+  "name",
+  "city",
+  "totalIncome",
+  "averageIncome",
+  "lastMonthIncome",
+];

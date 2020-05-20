@@ -28,7 +28,6 @@ export async function fetchCompaniesAll(): Promise<Company[]> {
     companies.map(async (company) => {
       let income: CompanyIncomeResponse = await fetchIncomes(company.id);
       let res = computeSums(income.incomes);
-
       return {
         id: company.id,
         name: company.name,
