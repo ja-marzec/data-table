@@ -47,7 +47,11 @@ export function filterValue(search: string) {
     return (
       company.id.toString().indexOf(search) !== -1 ||
       company.name.toLowerCase().indexOf(search) !== -1 ||
+      company.name.toUpperCase().indexOf(search) !== -1 ||
+      company.name.indexOf(search) !== -1 ||
       company.city.toLowerCase().indexOf(search) !== -1 ||
+      company.city.toUpperCase().indexOf(search) !== -1 ||
+      company.city.indexOf(search) !== -1 ||
       company.totalIncome.toString().indexOf(search) !== -1 ||
       company.averageIncome.toString().indexOf(search) !== -1 ||
       company.lastMonthIncome.toString().indexOf(search) !== -1
