@@ -1,0 +1,14 @@
+@import "varibles";
+
+.label{
+  display: block;
+  text-align: center;
+  margin: 30px 0;
+}
+.input{
+  border: solid 1px $light-blue;
+  padding: 5px 10px;
+  margin-left: 1em;
+  border-radius: 5px;
+  font-family: "Jost-medium";
+}

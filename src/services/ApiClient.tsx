@@ -8,6 +8,9 @@ import {
 
 import moment, { Moment } from "moment";
 
+const COMPANIES__URL :string = "https://recruitment.hal.skygate.io/companies";
+const COMPANY__INCOMES__URL : string = "https://recruitment.hal.skygate.io/incomes/";
+
 export function getFromUrl<T>(url: string): Promise<T> {
   return axios.get<T>(url).then((response: AxiosResponse<T>) => {
     return response.data;
@@ -15,26 +18,25 @@ export function getFromUrl<T>(url: string): Promise<T> {
 }
 
 export function fetchCompanies(): Promise<CompanyResponse[]> {
-  return getFromUrl("https://recruitment.hal.skygate.io/companies");
+  return getFromUrl(COMPANIES__URL);
 }
-
 export function fetchIncomes(id: number): Promise<CompanyIncomeResponse> {
-  return getFromUrl(`https://recruitment.hal.skygate.io/incomes/${id}`);
+  return getFromUrl(COMPANY__INCOMES__URL + id);
 }
-
 export async function fetchCompaniesAll(): Promise<Company[]> {
   let companies = await fetchCompanies();
   return await Promise.all(
+    //  await ?
     companies.map(async (company) => {
       let income: CompanyIncomeResponse = await fetchIncomes(company.id);
-      let res = computeSums(income.incomes);
+      let result = computeSums(income.incomes);
       return {
         id: company.id,
         name: company.name,
         city: company.city,
-        totalIncome: Number(res.total.toFixed(2)),
-        averageIncome: Number((res.total / income.incomes.length).toFixed(2)),
-        lastMonthIncome: Number(res.lastMonth.toFixed(2)),
+        totalIncome: Number(result.total.toFixed(2)),
+        averageIncome: Number((result.total / income.incomes.length).toFixed(2)),
+        lastMonthIncome: Number(result.lastMonth.toFixed(2)),
       };
     })
   );
@@ -43,20 +45,10 @@ export async function fetchCompaniesAll(): Promise<Company[]> {
 let lastDate: (incomes: IncomesResponse[]) => string = (
   incomes: IncomesResponse[]
 ) => {
-  // const maxDateIncome: IncomesResponse | null = get_max(incomes, (income) => income.date)
   return incomes.reduce((first: IncomesResponse, second: IncomesResponse) =>
     second.date > first.date ? second : first
   ).date;
 };
-
-// function get_max<T>(arr: T[], keyFunction: (elem: T)=> any): T | null {
-//   if(arr.length == 0) {
-//     return null;
-//   }
-//   return arr.reduce((one, two) => {
-//       return keyFunction(one) > keyFunction(two) ? one : two;
-//   })
-// }
 
 function computeSums(
   incomes: IncomesResponse[]
@@ -80,17 +72,3 @@ function getValueAfterDate(income: IncomesResponse, date: Moment): number {
   }
   return 0;
 }
-// async function getAllReadyCompanies(companiesUrl, incomeUrl) {
-//   let companies = await fetchCompanies(companiesUrl);
-//   companies = await Promise.all(
-//     companies.map(anc (company) => {
-//       let incomeOfCompany = await fetchIncomesById(company.id, incomeUrl);
-//       let res = sumAndAvgIncome(incomeOfCompany.incomes);
-//       company.sum = Number(res.sum.toFixed(2));
-//       company.avg = Number(res.avg.toFixed(2));
-//       company.lastMonthIncome = getLastMonthIncome(incomeOfCompany.incomes);
-//       return company;
-//     })
-//   );
-//   return companies;
-// }

@@ -1,97 +1,14 @@
-@import "reset-default";
-@import "varibles";
-
+@import "elements/reset-default";
+@import "elements/varibles";
+@import "elements/loading";
+@import "elements/table";
+@import "elements/filter";
+@import "elements/pagination";
 
 .app {
     font-family: "Jost-medium";
-    font-weight: 100;
 }
 
-.label{
-    display: block;
-    text-align: center;
-    margin: 30px ;
-}
-.input{
-    border: solid 1px $light-blue;
-    padding: 5px 10px;
-    margin-left: 1em;
-    border-radius: 5px;
-}
-
-.table{
-    display: block;
-    width: 80%;
-    margin: 0 auto;
-    border-collapse: collapse;
-    overflow-x: auto;
-    @media (max-width: $md) {
-        width: 100%;
-    }
-    &__head{
-        &__item{
-            &__button{
-                border: none;
-                border-radius: 5%;
-                vertical-align: center;
-                text-align: left;
-                text-transform: uppercase;
-                margin-bottom: 1em;
-                cursor: pointer;
-                padding-left: 10px;
-                width: 13.3vw;
-                @media (max-width: $md) {
-                    width: 30vw;
-                    font-size: 0.8em;
-                    margin-bottom: 0;
-                }
-                img{
-                    transform: rotate(270deg);
-                    height: 0.8em;
-                }
-                &--descending {
-                    img{
-                        transform: rotate(90deg);
-                    }
-                }
 
 
 
-            }
-        }
-    }
-&__row{
-    height: 2em;
-    &:nth-child(odd) {
-        background-color: $light-blue;
-    }
-}
-    &__column{
-        vertical-align: middle;
-        text-align: left;
-        padding-left: 10px;
-        font-size: 0.8em;
-        font-weight: 100;
-        width: 30vw;
-
-    }
-    &:first-child{
-        width: 5vw;
-    }
-
-}
-.pagination{
-    margin: 30px 0;
-    text-align: center;
-
-    &__button{
-        border-radius: 50px;
-        background-color: white;
-        border: none;
-        width: 8em;
-        letter-spacing: 2.5px;
-        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease 0s;
-        cursor: pointer;
-        }
-}

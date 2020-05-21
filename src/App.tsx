@@ -1,16 +1,18 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import arrow from "./assets/arrow.png";
 import "./styles/App.scss";
 import { fetchCompaniesAll } from "./services/ApiClient";
-import { Company, COMPANY_KEYS } from "./Model";
-import { stat } from "fs";
-// merge sort
+import { Company} from "./Model";
+import {TableBody} from "./components/TableBody";
+import {Filter} from "./components/Filter";
+import {TableHeader} from "./components/TableHeader";
+import {Pagination} from "./components/Pagination";
+import {Loading} from "./components/Loading";
 
 enum SortDirection {
   ASCENDING,
   DESCENDING,
 }
-enum Paginate {
+export enum Paginate {
   NEXT,
   PREVIOUS,
 }
@@ -34,9 +36,6 @@ interface Unsorted {
 }
 type Sort = Sorted | Unsorted;
 
-// tagged union
-// sorted{field, direction}
-// unsorted
 function App() {
   const [state, setState] = useState<State>({
     companies: [],
@@ -59,12 +58,13 @@ function App() {
         companies: response,
         offset: 0,
         visibleCompanies: response,
+        isLoaded: true
       }));
     });
   }
+
   function filterInput(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
-    console.log(value);
     if (value === "") {
       setState((s) => ({
         ...s,
@@ -128,13 +128,11 @@ function App() {
         return sortByField(field, newDirection);
     }
   }
-
   function sortTable(field: keyof Company): void {
     const comparator = getSortFunction(field);
     let sortedData = mergeSort(state.visibleCompanies, comparator);
     setState((s) => ({ ...s, visibleCompanies: sortedData, offset: 0 }));
   }
-
   function sortByField(
     field: keyof Company,
     direction: SortDirection
@@ -174,7 +172,7 @@ function App() {
       leftIndex = 0,
       rightIndex = 0;
     while (leftIndex < left.length && rightIndex < right.length) {
-      if (comparator(left[leftIndex], right[rightIndex]) == -1) {
+      if (comparator(left[leftIndex], right[rightIndex]) === -1) {
         resultArray.push(left[leftIndex]);
         leftIndex++;
       } else {
@@ -194,89 +192,41 @@ function App() {
     ) {
       let newOffset = state.offset + LIMIT;
       setState((s) => ({ ...s, offset: newOffset }));
-    } else if (action === Paginate.PREVIOUS && state.offset != 0) {
+    } else if (action === Paginate.PREVIOUS && state.offset !== 0) {
       let newOffset = state.offset - LIMIT;
       setState((s) => ({ ...s, offset: newOffset }));
     }
   }
 
-  function tableRows() {
-    return state.visibleCompanies
-      .slice(state.offset, state.offset + LIMIT)
-      .map((item, index) => {
-        return [
-          <tr className="table__row" key={index}>
-            <th className="table__column">{item.id}</th>
-            <th className="table__column">{item.name}</th>
-            <th className="table__column">{item.city}</th>
-            <th className="table__column">{item.totalIncome}</th>
-            <th className="table__column">{item.averageIncome}</th>
-            <th className="table__column">{item.lastMonthIncome}</th>
-          </tr>,
-        ];
-      });
-  }
-
-
-  function tableHeader(companyKey: keyof Company, companyDisplay: string) {
-    return (
-      <th className="table__head__item">
-        <div
-          className="table__head__item__button"
-          onClick={() => sortTable(companyKey)}
-        >
-          {companyDisplay}
-        </div>
-      </th>
-    );
-  }
-
   return (
     <div className="app">
-      <label className="label">
-        Filter
-        <input
-          className="input"
-          type="text"
-          value={state.search}
-          onChange={(event) => filterInput(event)}
-        />
-      </label>
 
+      <Loading
+          loading={state.isLoaded}
+      />
 
-
+      <Filter
+          search={state.search}
+          filterInput={(event ) => filterInput(event)}
+      />
       <table className="table">
-        <thead className="table__head">
-          <tr className="table__head__row">
-            {tableHeader("id", "ID")}
-            {tableHeader("name", "NAME")}
-            {tableHeader("city", "CITY")}
-            {tableHeader("totalIncome", "TOTAL INCOME")}
-            {tableHeader("averageIncome", "AVERAGE INCOME")}
-            {tableHeader("lastMonthIncome", "LAST MONTH INCOME")}
-           </tr>
-        </thead>
-        <tbody>{tableRows()}</tbody>
+        <TableHeader
+            sortTable={sortTable}
+        />
+        <TableBody
+            visibleCompanies={state.visibleCompanies}
+            offset={state.offset}
+            limit={LIMIT}
+        />
       </table>
 
-      <div className="pagination">
-        <button
-          className="pagination__button "
-          onClick={() => pagination(Paginate.PREVIOUS)}
-        >
-          Previous
-        </button>
-        <span className="pagination__info">
-          {state.offset / LIMIT + 1} /{" "}
-          {Math.ceil(state.visibleCompanies.length / LIMIT)}
-        </span>
-        <button
-          className="pagination__button"
-          onClick={() => pagination(Paginate.NEXT)}
-        >
-          Next
-        </button>
-      </div>
+      <Pagination
+          pagination={pagination}
+          offset={state.offset}
+          LIMIT={LIMIT}
+          visibleCompanies={state.visibleCompanies}
+      />
+
     </div>
   );
 }

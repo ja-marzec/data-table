@@ -1,0 +1,15 @@
+@import "varibles";
+
+.pagination{
+  margin: 30px 0;
+  text-align: center;
+  &__button{
+    width: 8em;
+    background-color: white;
+    cursor: pointer;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    letter-spacing: 2.5px;
+  }
+}
