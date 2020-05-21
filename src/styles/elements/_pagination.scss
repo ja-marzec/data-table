@@ -1,9 +1,10 @@
 @import "varibles";
 
-.pagination{
+.pagination {
   margin: 30px 0;
   text-align: center;
-  &__button{
+
+  &__button {
     width: 8em;
     background-color: white;
     cursor: pointer;

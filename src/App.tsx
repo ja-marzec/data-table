@@ -7,7 +7,12 @@ import { Filter } from "./components/Filter";
 import { TableHeader } from "./components/TableHeader";
 import { Pagination } from "./components/Pagination";
 import { Loading } from "./components/Loading";
-import { mergeSort, oppositeDirection } from "./utilities";
+import {
+  mergeSort,
+  oppositeDirection,
+  filterValue,
+  sortByField,
+} from "./utilities";
 
 interface State {
   companies: Company[];
@@ -40,10 +45,6 @@ function App() {
   const LIMIT = 20;
 
   useEffect(() => {
-    getCompanies();
-  }, []);
-
-  function getCompanies() {
     fetchCompaniesAll().then((response) => {
       setState((s) => ({
         ...s,
@@ -53,88 +54,56 @@ function App() {
         isLoaded: true,
       }));
     });
-  }
+  }, []);
+
 
   function filterInput(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
-    if (value === "") {
-      setState((s) => ({
+      setState((s) => {
+        const newCompanies = value === "" ? s.companies : s.companies.filter(filterValue(value)) 
+        return {
         ...s,
         search: value,
         offset: 0,
-        visibleCompanies: s.companies,
-      }));
-    } else {
-      setState((s) => ({
-        ...s,
-        search: value,
-        offset: 0,
-        visibleCompanies: s.companies.filter(filterValue(value)),
-      }));
-    }
-  }
-  function filterValue(search: string) {
-    return (company: Company) => {
-      return (
-        company.id.toString().indexOf(search) !== -1 ||
-        company.name.toLowerCase().indexOf(search) !== -1 ||
-        company.city.toLowerCase().indexOf(search) !== -1 ||
-        company.totalIncome.toString().indexOf(search) !== -1 ||
-        company.averageIncome.toString().indexOf(search) !== -1 ||
-        company.lastMonthIncome.toString().indexOf(search) !== -1
-      );
-    };
+        visibleCompanies: newCompanies,
+      }});
   }
 
-  function getSortFunction(field: keyof Company) {
+  function getSort(field: keyof Company): Sorted {
     switch (state.sort.t) {
       case "UNSORTED":
-        setState((s) => ({
-          ...s,
-          sort: {
-            t: "SORTED",
-            field: field,
-            direction: SortDirection.ASCENDING,
-          },
-        }));
-        return sortByField(field, SortDirection.ASCENDING);
+        return {
+          t: "SORTED",
+          field: field,
+          direction: SortDirection.ASCENDING,
+        };
       case "SORTED":
         const newDirection =
           state.sort.field !== field
             ? SortDirection.ASCENDING
             : oppositeDirection(state.sort.direction);
-        setState((s) => ({
-          ...s,
-          sort: {
-            t: "SORTED",
-            field: field,
-            direction: newDirection,
-          },
-        }));
-        return sortByField(field, newDirection);
+        return {
+          t: "SORTED",
+          field: field,
+          direction: newDirection,
+        };
     }
   }
 
   function sortTable(field: keyof Company): void {
-    const comparator = getSortFunction(field);
-    let sortedData = mergeSort(state.visibleCompanies, comparator);
-    setState((s) => ({ ...s, visibleCompanies: sortedData, offset: 0 }));
+    const sort = getSort(field);
+    let sortedData = mergeSort(
+      state.visibleCompanies,
+      sortByField(sort.field, sort.direction)
+    );
+    setState((s) => ({
+      ...s,
+      sort: sort,
+      visibleCompanies: sortedData,
+      offset: 0,
+    }));
   }
 
-  
-  function sortByField(
-    field: keyof Company,
-    direction: SortDirection
-  ): (fist: Company, second: Company) => number {
-    const directionModifier = direction === SortDirection.ASCENDING ? 1 : -1;
-    return (fist, second) => {
-      if ((fist[field] as any) < (second[field] as any))
-        return -1 * directionModifier;
-      if ((fist[field] as any) > (second[field] as any))
-        return 1 * directionModifier;
-      return 0;
-    };
-  }
   function pagination(action: Paginate): void {
     if (
       action === Paginate.NEXT &&
@@ -147,6 +116,7 @@ function App() {
       setState((s) => ({ ...s, offset: newOffset }));
     }
   }
+
   function loadingOverlay() {
     if (!state.isLoaded) {
       return <Loading />;

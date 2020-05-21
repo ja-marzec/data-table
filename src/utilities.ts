@@ -42,3 +42,28 @@ export function oppositeDirection(direction: SortDirection) {
     ? SortDirection.DESCENDING
     : SortDirection.ASCENDING;
 }
+export function filterValue(search: string) {
+  return (company: Company) => {
+    return (
+      company.id.toString().indexOf(search) !== -1 ||
+      company.name.toLowerCase().indexOf(search) !== -1 ||
+      company.city.toLowerCase().indexOf(search) !== -1 ||
+      company.totalIncome.toString().indexOf(search) !== -1 ||
+      company.averageIncome.toString().indexOf(search) !== -1 ||
+      company.lastMonthIncome.toString().indexOf(search) !== -1
+    );
+  };
+}
+export function sortByField(
+  field: keyof Company,
+  direction: SortDirection
+): (fist: Company, second: Company) => number {
+  const directionModifier = direction === SortDirection.ASCENDING ? 1 : -1;
+  return (fist, second) => {
+    if ((fist[field] as any) < (second[field] as any))
+      return -1 * directionModifier;
+    if ((fist[field] as any) > (second[field] as any))
+      return 1 * directionModifier;
+    return 0;
+  };
+}

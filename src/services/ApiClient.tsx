@@ -8,8 +8,8 @@ import {
 
 import moment, { Moment } from "moment";
 
-const COMPANIES__URL :string = "https://recruitment.hal.skygate.io/companies";
-const COMPANY__INCOMES__URL : string = "https://recruitment.hal.skygate.io/incomes/";
+const COMPANIES_URL: string = "https://recruitment.hal.skygate.io/companies";
+const COMPANY_INCOMES_URL: string = "https://recruitment.hal.skygate.io/incomes/";
 
 export function getFromUrl<T>(url: string): Promise<T> {
   return axios.get<T>(url).then((response: AxiosResponse<T>) => {
@@ -18,15 +18,14 @@ export function getFromUrl<T>(url: string): Promise<T> {
 }
 
 export function fetchCompanies(): Promise<CompanyResponse[]> {
-  return getFromUrl(COMPANIES__URL);
+  return getFromUrl(COMPANIES_URL);
 }
 export function fetchIncomes(id: number): Promise<CompanyIncomeResponse> {
-  return getFromUrl(COMPANY__INCOMES__URL + id);
+  return getFromUrl(COMPANY_INCOMES_URL + id);
 }
 export async function fetchCompaniesAll(): Promise<Company[]> {
   let companies = await fetchCompanies();
-  return await Promise.all(
-    //  await ?
+  return Promise.all(
     companies.map(async (company) => {
       let income: CompanyIncomeResponse = await fetchIncomes(company.id);
       let result = computeSums(income.incomes);
@@ -35,7 +34,9 @@ export async function fetchCompaniesAll(): Promise<Company[]> {
         name: company.name,
         city: company.city,
         totalIncome: Number(result.total.toFixed(2)),
-        averageIncome: Number((result.total / income.incomes.length).toFixed(2)),
+        averageIncome: Number(
+          (result.total / income.incomes.length).toFixed(2)
+        ),
         lastMonthIncome: Number(result.lastMonth.toFixed(2)),
       };
     })
