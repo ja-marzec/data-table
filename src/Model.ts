@@ -27,3 +27,11 @@ export const COMPANY_KEYS: Array<keyof Company> = [
   "averageIncome",
   "lastMonthIncome",
 ];
+export enum Paginate {
+  NEXT,
+  PREVIOUS,
+}
+export enum SortDirection {
+  ASCENDING,
+  DESCENDING,
+}
